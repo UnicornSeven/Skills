@@ -12,13 +12,14 @@ LOG ON
 (NAME='SCHOOL_LOG',
 FILENAME='F:\SCHOOL\SCHOOL.LDF',
 SIZE=1MB,
-filegrowth=1%,
-maxsize=100mb)
+MAXSIZE=100MB,
+FILEGROWTH=10%
+)
 
 
 --新增数据库文件
-alter database school
-add file
+ALTER DATABASE SCHOOL
+ADD FILE
 (
 NAME='SCHOOL01',
 FILENAME='F:\SCHOOL\SCHOOL01.ndf',
@@ -29,8 +30,8 @@ FILEGROWTH=2MB
 
 
 --新增日志文件
-alter database school
-add log file
+ALTER DATABASE SCHOOL
+ADD LOG FILE
 (
 NAME='SCHOOL_log01',
 FILENAME='F:\SCHOOL\SCHOOL_log01.Ldf',
@@ -41,35 +42,30 @@ FILEGROWTH=1%
 
 
 --添加文件组
-alter database school
-add filegroup filegroup02
-
+ALTER DATABASE SCHOOL
+ADD FILEGROUP FILEGROUP02
 
 
 --添加数据文件放入文件组
- alter database school
-add file
+ALTER DATABASE SCHOOL
+ADD FILE
 (
-name='school02',
-filename='f:\school\school02.ndf',
-size=10mb,
-maxsize=unlimited,
-filegrowth=10mb
+  NAME='SCHOOL02',
+  FILENAME='F:\SCHOOL\SCHOOL02.NDF',
+  SIZE=10MB,
+  MAXSIZE=UNLIMITED,
+  FILEGROWTH=10MB
 )
-to filegroup filegroup02
-
+TO FILRGROUP FILEGROUP02
 
 
 --修改默认文件组
-alter database school
-modify filegroup filegroup02 default
-
+ALTER DATABASE SCHOOL
+MODIFY FILEGROUP FILEGROUP02 DEFAULT
 
 ---修改数据库名称
 ALTER DATABASE SCHOOL
 MODIFY NAME=SCHOOL01
-
-
 
 --修改数据库文件属性
 ALTER DATABASE SCHOOL01
@@ -85,8 +81,6 @@ DROP DATABASE SCHOOL01
 
 ----创建数据表
 USE SCHOOL
-GO
-
 CREATE TABLE STUDENT
 (
 ID BIGINT IDENTITY(1,1) NOT NULL,
@@ -112,7 +106,6 @@ GO
 ALTER TABLE STUDENT
 ADD  PHONE VARCHAR(20) NULL
 
-
 ----删除列
 ALTER TABLE STUDENT
 DROP COLUMN PHONE
@@ -120,8 +113,6 @@ DROP COLUMN PHONE
 
 ----修改表名
 EXEC sp_rename 'STUDENT','STUDENT01'
-
-
 
 ---删除表
 DROP TABLE STUDENT01
@@ -157,8 +148,8 @@ WHERE ID='2'
 DELETE FROM STUDENT
 
 ----向表中插入的数据
-insert into student
-values
+INSERT INTO STUDENT
+VALUES
 ('李明','男','10'),
 ('赵黄','男','13'),
 ('王海','男','15'),
@@ -177,34 +168,31 @@ SELECT NAME  姓名,SEX AS 性别 from STUDENT AS 学生表
 
 
 -----使用where限制返回的数据
-select * from student where name='李明'
+SELECT * FROM STUDENT WHERE NAME='李明'
 
-select * from student where age>'12'
+SELECT * FROM STUDENT WHERE AGE > '12'
 
 -----为了演示对表做以下调整
 
-
 --先向表中添加一列
-alter table student
-add address varchar(10)
-
-
+ALTER TABLE STUDENT
+ADD ADDRESS VARCHAR(10)
 
 --对该列赋值
-update student
-set address='北京'
+UPDATE STUDENT
+SET ADDRESS='北京'
 WHERE ID='3'
 
-update student
-set address='武汉'
+UPDATE STUDENT
+SET ADDRESS='武汉'
 WHERE ID='4'
 
-update student
-set address='武汉'
+UPDATE STUDENT
+SET ADDRESS='武汉'
 WHERE ID='5'
 
-update student
-set address='重庆'
+UPDATE STUDENT
+SET ADDRESS='重庆'
 WHERE ID='7'
 
 ----首先创建另外一张学生表用于测试merge...into使用
@@ -213,8 +201,6 @@ IF OBJECT_ID('STUDENT02','U') IS NOT NULL
 DROP TABLE STUDENT02
 
 SELECT * INTO STUDENT02 FROM STUDENT WHERE 1=2
-
-
 
 ----向新的学生表插入两条学生数据
 
